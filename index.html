@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized News Digest</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <h1 class="header__title" id="headerTitle">
+                    <i class="fas fa-newspaper"></i>
+                    Personalized News Digest
+                </h1>
+                <nav class="header__nav">
+                    <button class="btn btn--outline btn--sm" id="backToMainBtn" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Main
+                    </button>
+                    <button class="btn btn--outline btn--sm" id="settingsToggle">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Settings Panel -->
+            <section class="settings-panel hidden" id="settingsPanel">
+                <div class="card">
+                    <div class="card__header">
+                        <h2><i class="fas fa-sliders-h"></i> Customize Your Feed</h2>
+                    </div>
+                    <div class="card__body">
+                        <div class="settings-grid">
+                            <!-- Interest Selection -->
+                            <div class="settings-group">
+                                <h3 class="form-label">Select Your Interests</h3>
+                                <div class="checkbox-grid" id="interestsContainer">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <!-- Frequency Selection -->
+                            <div class="settings-group">
+                                <h3 class="form-label">Update Frequency</h3>
+                                <div class="radio-group" id="frequencyContainer">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-actions">
+                            <button class="btn btn--primary" id="applySettings">
+                                <i class="fas fa-check"></i>
+                                Apply Settings
+                            </button>
+                            <button class="btn btn--secondary" id="resetSettings">
+                                <i class="fas fa-undo"></i>
+                                Reset to Default
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Feed View -->
+            <div id="mainFeedView">
+                <!-- Dashboard Controls -->
+                <section class="dashboard-controls">
+                    <div class="controls-row">
+                        <div class="view-toggle">
+                            <button class="btn btn--secondary active" id="allNewsBtn">
+                                <i class="fas fa-globe"></i>
+                                All News
+                            </button>
+                            <button class="btn btn--secondary" id="savedNewsBtn">
+                                <i class="fas fa-bookmark"></i>
+                                Saved Articles (<span id="savedCount">0</span>)
+                            </button>
+                        </div>
+                        
+                        <div class="controls-right">
+                            <div class="search-container">
+                                <input type="text" class="form-control search-input" id="searchInput" placeholder="Search articles...">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                            
+                            <select class="form-control sort-select" id="sortSelect">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="rating">Highest Rated</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- News Feed -->
+                <section class="news-feed">
+                    <div class="feed-header">
+                        <h2 id="feedTitle">Latest Technology News</h2>
+                        <div class="feed-meta">
+                            <span id="articleCount">Loading articles...</span>
+                            <span class="feed-frequency" id="feedFrequency">Daily Updates</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div class="loading-state" id="loadingState">
+                        <div class="loading-spinner"></div>
+                        <p>Loading your personalized news digest...</p>
+                    </div>
+                    
+                    <!-- Articles Grid -->
+                    <div class="articles-grid" id="articlesGrid">
+                        <!-- Articles will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div class="empty-state hidden" id="emptyState">
+                        <div class="empty-state__icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3>No articles found</h3>
+                        <p>Try adjusting your interests or search criteria.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Article Detail View -->
+            <div id="articleDetailView" class="hidden">
+                <div class="article-detail">
+                    <div class="article-detail__header">
+                        <div class="article-detail__meta">
+                            <span class="article-detail__source" id="detailSource"></span>
+                            <span class="article-detail__date" id="detailDate"></span>
+                            <span class="article-detail__category" id="detailCategory"></span>
+                        </div>
+                        <h1 class="article-detail__title" id="detailTitle"></h1>
+                    </div>
+                    
+                    <div class="article-detail__image-container">
+                        <img class="article-detail__image" id="detailImage" alt="">
+                    </div>
+                    
+                    <div class="article-detail__content">
+                        <div class="article-detail__summary" id="detailSummary"></div>
+                        <div class="article-detail__full-content" id="detailFullContent"></div>
+                        
+                        <div class="article-detail__actions">
+                            <div class="detail-action-buttons">
+                                <button class="btn btn--primary" id="detailReadFullBtn">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Read Full Article
+                                </button>
+                                <button class="btn btn--secondary detail-save-btn" id="detailSaveBtn">
+                                    <i class="fas fa-bookmark"></i>
+                                    Save Article
+                                </button>
+                                <button class="btn btn--secondary" id="detailShareBtn">
+                                    <i class="fas fa-share"></i>
+                                    Share
+                                </button>
+                            </div>
+                            
+                            <div class="detail-rating">
+                                <span class="rating-label">Rate this article:</span>
+                                <div class="star-rating" id="detailStarRating">
+                                    <!-- Stars will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__info">
+                    <p>&copy; 2025 Personalized News Digest. Built with AI-powered news aggregation.</p>
+                    <p class="footer__tech">Powered by NewsAPI, Gemini AI, and modern web technologies.</p>
+                </div>
+                <div class="footer__links">
+                    <a href="#" class="footer__link">About</a>
+                    <a href="#" class="footer__link">Privacy</a>
+                    <a href="#" class="footer__link">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Share Modal -->
+    <div class="modal hidden" id="shareModal">
+        <div class="modal__backdrop"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Share Article</h3>
+                <button class="modal__close" id="closeShareModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal__body">
+                <div class="share-options">
+                    <button class="share-btn" id="copyLinkBtn">
+                        <i class="fas fa-link"></i>
+                        Copy Link
+                    </button>
+                    <button class="share-btn" id="shareTwitterBtn">
+                        <i class="fab fa-twitter"></i>
+                        Twitter
+                    </button>
+                    <button class="share-btn" id="shareFacebookBtn">
+                        <i class="fab fa-facebook"></i>
+                        Facebook
+                    </button>
+                    <button class="share-btn" id="shareLinkedInBtn">
+                        <i class="fab fa-linkedin"></i>
+                        LinkedIn
+                    </button>
+                </div>
+                <div class="share-link-container">
+                    <input type="text" class="form-control" id="shareLink" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <div class="toast__content">
+            <i class="toast__icon"></i>
+            <span class="toast__message"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
